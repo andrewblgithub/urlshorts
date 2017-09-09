@@ -6,11 +6,10 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Url Shortener' });
+  res.render('index', { title: 'Url Shorts' });
 });
 
-
-
+// new url data
 router.get('/new/:url(*)', function(req, res) {
   mongo.connect(mongoUrl, function(err, db) {
     if (err) throw err;
@@ -54,13 +53,25 @@ router.get('/new/:url(*)', function(req, res) {
   })
 })
 
+// shortened url links
 router.get('/:short', function(req, res) {
-  var short = req.params.short;
-  if(!isNaN(short)) {
-    res.json(short);
-  } else if (isNaN(short)) {
-    res.json("Oops! This isn't in our database!")
-  }
+  var url;
+  mongo.connect(mongoUrl, function(err, db) {
+    if (err) throw err;
+    var urldb = db.collection('urldb');
+    var short = req.params.short;
+    var shortUrl = "https://urlshorts.herokuapp.com/" + short;
+
+    urldb.findOne({short_url:shortUrl}, function(err, doc) {
+      if (doc) {
+        console.log("Url found! Redirecting...")
+        res.redirect(doc.original_url);
+      } else {
+        console.log("Url not found!")
+        res.json( {error: "Url not found!"} )
+      }
+    })
+  })
 })
 
 module.exports = router;
