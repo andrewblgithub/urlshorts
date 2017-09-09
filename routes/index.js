@@ -26,11 +26,7 @@ router.get('/new/:url(*)', function(req, res) {
           if (!doc) {
             console.log("Creating new entry!")
             urldb.find({}).sort({_id:-1}).limit(1).toArray(function(err,doc) {
-              var short = doc[0]._id;  
-              if (short == undefined) {
-                short = 1;
-              }
-              short++;
+              var short = doc[0]._id + 1;  
               var shortUrl = "https://urlshorts.herokuapp.com/" + short;
               var dataInsert = { "_id":short, original_url:url, short_url:shortUrl }
               var data = { original_url:url, short_url:shortUrl }
