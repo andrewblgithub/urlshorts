@@ -1,6 +1,7 @@
 var express = require('express');
 var mongo = require('mongodb').MongoClient;
-var mongoUrl = "mongodb://localhost:27017/urlshortener" 
+//var mongoUrl = "mongodb://localhost:27017/urlshortener" 
+var mongoUrl = "mongodb://ds127994.mlab.com:27994/heroku_82ws5wqw"
 var validUrl = require('valid-url');
 var router = express.Router();
 
